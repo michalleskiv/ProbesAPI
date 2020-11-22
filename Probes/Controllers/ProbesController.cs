@@ -32,16 +32,6 @@ namespace ProbesAPI.Controllers
         /// </summary>
         /// <param name="idProbe">Id of a probe</param>
         /// <returns>A probe</returns>
-        /// <remarks>
-        /// Sample response:
-        ///
-        ///     {
-        ///        "id": 1,
-        ///        "name": "Item1",
-        ///        "isComplete": true
-        ///     }
-        ///
-        /// </remarks>
         /// <response code="200">Returns a probe</response>
         /// <response code="400">Bad request</response>
         [Route("/probes/{idProbe}")]

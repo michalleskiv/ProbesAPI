@@ -10,6 +10,9 @@ using ProbesLib.Interfaces;
 
 namespace ProbesLib.Models
 {
+    /// <summary>
+    /// Implements the functionality of IProbesWorker
+    /// </summary>
     public class ProbesWorker : IProbesWorker
     {
         private static HttpClient _client;
