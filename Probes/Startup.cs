@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 using ProbesLib.Interfaces;
 using ProbesLib.Models;
 
-namespace Probes
+namespace ProbesAPI
 {
     public class Startup
     {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProbesLib.Interfaces;
 
-namespace Probes.Controllers
+namespace ProbesAPI.Controllers
 {
     public class ProbesController : Controller
     {
