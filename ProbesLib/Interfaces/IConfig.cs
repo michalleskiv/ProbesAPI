@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProbesLib.Interfaces
+﻿namespace ProbesLib.Interfaces
 {
     public interface IConfig
     {

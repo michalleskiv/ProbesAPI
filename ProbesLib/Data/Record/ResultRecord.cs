@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProbesLib.Data.Record
+﻿namespace ProbesLib.Data.Record
 {
     public class ResultRecord
     {

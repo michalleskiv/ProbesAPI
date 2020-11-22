@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProbesLib.Data.Count
+﻿namespace ProbesLib.Data.Count
 {
     public class DataCount
     {

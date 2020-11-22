@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ProbesLib.Data.Definitions;
 using ProbesLib.Data.Record;
 using ProbesLib.Data.Count;

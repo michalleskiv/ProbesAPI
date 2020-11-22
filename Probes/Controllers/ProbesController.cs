@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProbesLib.Interfaces;
-using ProbesLib.Models;
 
 namespace Probes.Controllers
 {
