@@ -29,8 +29,7 @@ namespace ProbesLib.Models
 
         public void ConfigureClient()
         {
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri(_config.Url);
+            _client = new HttpClient {BaseAddress = new Uri(_config.Url)};
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
