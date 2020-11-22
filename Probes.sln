@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProbesAPI", "Probes\ProbesAPI.csproj", "{0C8905C2-27BC-4910-B9D5-62BAE9D536F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Probes", "Probes\Probes.csproj", "{0C8905C2-27BC-4910-B9D5-62BAE9D536F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProbesLib", "ProbesLib\ProbesLib.csproj", "{55D3137C-3271-45F4-98CB-4F3E4FB1B1FA}"
 EndProject

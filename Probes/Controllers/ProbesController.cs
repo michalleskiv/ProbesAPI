@@ -21,12 +21,12 @@ namespace Probes.Controllers
             return new OkObjectResult(await _worker.GetDefinition());
         }
 
-        //[Route("/probes/{idProbe}")]
-        //[HttpGet("{idProbe}")]
-        //public async Task<IActionResult> GetProbeById(string idProbe)
-        //{
-        //    return new OkObjectResult(await _worker.GetById(idProbe));
-        //}
+        [Route("/probes/{idProbe}")]
+        [HttpGet("{idProbe}")]
+        public async Task<IActionResult> GetProbeById(string idProbe)
+        {
+            return new OkObjectResult(await _worker.GetById(idProbe));
+        }
 
         [Route("/probes/{idProbe}/data")]
         [HttpGet("{idProbe}")]

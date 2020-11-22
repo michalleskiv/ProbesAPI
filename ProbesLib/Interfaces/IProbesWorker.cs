@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ProbesLib.Models;
+using ProbesLib.Data.Definitions;
+using ProbesLib.Data.Record;
+using ProbesLib.Data.Count;
 
 namespace ProbesLib.Interfaces
 {

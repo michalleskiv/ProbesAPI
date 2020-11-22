@@ -6,6 +6,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ProbesLib.Data.Count;
+using ProbesLib.Data.Definitions;
+using ProbesLib.Data.Record;
 using ProbesLib.Interfaces;
 
 namespace ProbesLib.Models

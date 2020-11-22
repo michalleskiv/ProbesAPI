@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProbesLib.Models
+namespace ProbesLib.Data.Definitions
 {
     public class ProbeDefinition
     {
