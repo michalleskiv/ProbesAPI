@@ -14,6 +14,14 @@ namespace ProbesAPI.Controllers
             _worker = probesWorker;
         }
 
+        [Route("/_bonjour.json")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Bonjour()
+        {
+            return new OkObjectResult(_worker.Bonjour());
+        }
+
         /// <summary>
         /// Shows probes definition table
         /// </summary>

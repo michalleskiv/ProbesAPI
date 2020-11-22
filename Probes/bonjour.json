@@ -1,0 +1,291 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Dr. Max Common API",
+    "description": "This is description of Common API. There is bonjour endpoint which provides data about system itself and business KPI probes (probeDefinition and probeData) which provides actual their values.",
+    "version": "1.4.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/DrMax_BDC/DrMax_Bonjour/1.4.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "paths": {
+    "/_bonjour.json": {
+      "get": {
+        "summary": "Bonjour",
+        "responses": {
+          "200": {
+            "description": "Bonjour prescription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bonjour"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/probes": {
+      "get": {
+        "summary": "Provides detail description for all probes implemented in the system",
+        "responses": {
+          "200": {
+            "description": "get probe description for all impletemented probes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Probes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/probes/{probeId}": {
+      "get": {
+        "summary": "Provides detail description for the selected probe",
+        "parameters": [
+          {
+            "name": "probeId",
+            "in": "path",
+            "description": "the selected probeId",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get probe data for probeId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProbeDefinition"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/probes/{probeId}/data": {
+      "get": {
+        "summary": "Provides values for the selected probe",
+        "parameters": [
+          {
+            "name": "probeId",
+            "in": "path",
+            "description": "the selected probeId",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get probe data for probeId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProbeData"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Bonjour": {
+        "title": "Bonjour structure schema",
+        "required": [
+          "bonjourVersion",
+          "component",
+          "system",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "bonjourVersion": {
+            "type": "string",
+            "description": "This is exact value. For different version of Bonjour exists different schemas.",
+            "enum": [
+              "1.4.0"
+            ]
+          },
+          "hostname": {
+            "type": "string",
+            "example": "nodejsapp-prod-1.prod.cz.drmax.net"
+          },
+          "version": {
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "type": "string",
+            "description": "Application version in form of semantic version",
+            "example": "1.0.15"
+          },
+          "system": {
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "minLength": 1,
+                "type": "string",
+                "description": "Git repository name of the main application",
+                "example": "drmax-magento2-local-cz"
+              },
+              "note": {
+                "type": "string",
+                "example": "Optional note"
+              }
+            }
+          },
+          "component": {
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "minLength": 1,
+                "type": "string",
+                "description": "Git repository of module or component",
+                "example": "drmax-magento2-mod-edenred"
+              },
+              "note": {
+                "type": "string",
+                "example": "Optional note"
+              }
+            }
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "dev",
+              "test",
+              "stage",
+              "prod"
+            ]
+          },
+          "lastCommitHash": {
+            "pattern": "^([a-f]|\\d){4,40}$",
+            "type": "string",
+            "description": "Latest commit hash (short version) of deployed version",
+            "example": "32cc565bf06d"
+          },
+          "buildNumber": {
+            "type": "string",
+            "description": "Build number from CI/CD system"
+          },
+          "apiReference": {
+            "pattern": "^http(s)?://.+$",
+            "type": "string",
+            "description": "references to API documentation - documents interfaces exposed by an application",
+            "example": "https://app.swaggerhub.com/apis/DrMax_BDC/DrMax_Rebus/1.0.0"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Probes": {
+        "title": "Probes structure schema",
+        "required": [
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "type": "string",
+            "description": "Probe version in form of semantic version",
+            "example": "1.0.0"
+          },
+          "probes": {
+            "type": "array",
+            "description": "Probes are specific health detection checks from business point of view. An application can implement several probes, or have none. This way it is possible to monitor critical application metrics and integrate them into monitoring systems easily.",
+            "items": {
+              "$ref": "#/components/schemas/ProbeDefinition"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "description": "Description for all probes implemented in the system"
+      },
+      "ProbeDefinition": {
+        "title": "ProbeDefinition structure schema",
+        "required": [
+          "defaultMaxValue",
+          "defaultMinValue",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "unique probe ID",
+            "example": 1
+          },
+          "name": {
+            "pattern": "^[a-zA-Z0-9_]*$",
+            "type": "string",
+            "example": "numberOfFailedOrders"
+          },
+          "defaultMinValue": {
+            "type": "number",
+            "description": "Value indicating minimum value to be considered as OK value, i.e. hihger value mean warning state",
+            "example": 30
+          },
+          "defaultMaxValue": {
+            "type": "number",
+            "description": "Value indicating that probe is in Critical state.",
+            "example": 300
+          },
+          "note": {
+            "type": "string",
+            "description": "any note, comment relevant to the respectiveValue. This for informational purposes only. This value can be displayed at monitoring systems."
+          }
+        },
+        "additionalProperties": false,
+        "description": "KPI probes definition"
+      },
+      "ProbeData": {
+        "title": "ProbeData structure schema",
+        "required": [
+          "respectiveValue"
+        ],
+        "type": "object",
+        "properties": {
+          "respectiveValue": {
+            "type": "number",
+            "description": "the value that is monitored. It must always be float64 data type (or any compatible one intâ€¦). So that value can be easily stored by monitoring systems (Icinga, Zabbix) and then used as time series value. Providing the respective value MUST be lightweight (duration < 1 sec) and it should not harm the providing system. In case of more complex calculation, some type of caching should be considered. Value should be for whole systems regarding number of instances",
+            "example": 68
+          },
+          "respectiveTime": {
+            "type": "string",
+            "description": "In case the respectiveValue is calculated in advance and cached, it must be stated exact time when the value was calculated.",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Actual KPI probe values. Probes are specific health detection checks from business point of view. An application can implement several probes, or have none. This way it is possible to monitor critical application metrics and integrate them into monitoring systems easily."
+      }
+    }
+  }
+}

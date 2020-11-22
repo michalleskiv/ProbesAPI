@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -34,6 +35,11 @@ namespace ProbesLib.Models
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _config.Token);
+        }
+
+        public string Bonjour()
+        {
+            return File.ReadAllText("bonjour.json");
         }
 
         public async Task<ResultDefinition> GetDefinition()

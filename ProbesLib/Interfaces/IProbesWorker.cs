@@ -11,6 +11,12 @@ namespace ProbesLib.Interfaces
     public interface IProbesWorker
     {
         /// <summary>
+        /// Returns JSON with Swagger documentation
+        /// </summary>
+        /// <returns>Swagger documentation</returns>
+        string Bonjour();
+
+        /// <summary>
         /// Gets definition of a probe
         /// </summary>
         /// <returns>Probe definition</returns>
