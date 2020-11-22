@@ -1,5 +1,8 @@
 ﻿namespace ProbesLib.Interfaces
 {
+    /// <summary>
+    /// Configurations for ProbesWorker
+    /// </summary>
     public interface IConfig
     {
         public string Url { get; set; }

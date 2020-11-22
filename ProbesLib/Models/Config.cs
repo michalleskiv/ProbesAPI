@@ -2,6 +2,9 @@
 
 namespace ProbesLib.Models
 {
+    /// <summary>
+    /// Implementation of IConfig
+    /// </summary>
     public class Config : IConfig
     {
         public string Url { get; set; }
