@@ -40,7 +40,9 @@ namespace ProbesAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    
+                    Version = "v1",
+                    Title = "Probes API",
+                    Description = "Extends functionality of Tabidoo API"
                 });
             });
         }
