@@ -49,14 +49,7 @@ namespace ProbesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProbeById(int idProbe)
         {
-            try
-            {
-                return new OkObjectResult(await _worker.GetById(idProbe));
-            }
-            catch (ProbeNotFoundException)
-            {
-                return BadRequest($"Probe with id:{idProbe} doesn't exist");
-            }
+            return new OkObjectResult(await _worker.GetById(idProbe));
         }
 
         /// <summary>
@@ -72,14 +65,7 @@ namespace ProbesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ExecuteProbeById(int idProbe)
         {
-            try
-            {
-                return new OkObjectResult(await _worker.ExecuteProbe(idProbe));
-            }
-            catch (ProbeNotFoundException)
-            {
-                return BadRequest($"Probe with id:{idProbe} doesn't exist");
-            }
+            return new OkObjectResult(await _worker.ExecuteProbe(idProbe));
         }
     }
 }

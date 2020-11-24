@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace ProbesLib.Data.Exceptions
 {
@@ -16,6 +18,16 @@ namespace ProbesLib.Data.Exceptions
             IdProbe = idProbe;
             Url = url;
             Response = response;
+        }
+
+        public override string ErrorMessageDeveloper()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public override string ErrorMessageUser()
+        {
+            return $"Probe with uniqueId: {IdProbe} doesn't exist";
         }
     }
 }

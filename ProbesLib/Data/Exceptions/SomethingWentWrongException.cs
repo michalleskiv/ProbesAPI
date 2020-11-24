@@ -6,6 +6,14 @@ namespace ProbesLib.Data.Exceptions
 {
     public class SomethingWentWrongException : Exception
     {
+        public virtual string ErrorMessageDeveloper()
+        {
+            return string.Empty;
+        }
 
+        public virtual string ErrorMessageUser()
+        {
+            return string.Empty;
+        }
     }
 }
