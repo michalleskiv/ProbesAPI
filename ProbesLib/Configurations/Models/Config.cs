@@ -1,6 +1,4 @@
-﻿using ProbesLib.Configurations;
-
-namespace ProbesLib.Configurations.Models
+﻿namespace ProbesLib.Configurations.Models
 {
     /// <summary>
     /// Implementation of IConfig
