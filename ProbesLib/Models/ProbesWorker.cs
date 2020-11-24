@@ -54,10 +54,7 @@ namespace ProbesLib.Models
 
         public async Task<ProbeDTO> GetById(int idProbe)
         {
-            var probes = await GetAllProbes();
-            var probe = probes.SingleOrDefault(p => p.UniqueId == idProbe);
-
-            return new ProbeDTO(probe);
+            return new ProbeDTO(await GetOneProbe(idProbe));
         }
 
         public async Task<CountDTO> ExecuteProbe(int idProbe)
@@ -75,8 +72,8 @@ namespace ProbesLib.Models
         private async Task<List<Probe>> GetAllProbes()
         {
             var url = _config.Url + _config.Endpoint
-                .Replace("{idApp}", _config.AppId)
-                .Replace("{idSchema}", _config.TableId);
+                .Replace("{appId}", _config.AppId)
+                .Replace("{tableId}", _config.TableId);
 
             var response = await _client.GetAsync(url);
 
@@ -93,14 +90,73 @@ namespace ProbesLib.Models
             return new List<Probe>();
         }
 
+        private async Task<Probe> GetOneProbe(int uniqueId)
+        {
+            var url = _config.Url + _config.FindProbeEndpoint
+                .Replace("{appId}", _config.AppId)
+                .Replace("{tableId}", _config.TableId)
+                .Replace("{uniqueId}", uniqueId.ToString());
+
+            var response = await _client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var resObject = JsonConvert.DeserializeObject<ResultRecord>(result);
+
+                var probes = resObject.Data.Select(r => r.Fields).ToList();
+
+                return probes.Single(p => p.UniqueId == uniqueId);
+            }
+
+            return null;
+        }
+
         private async Task<int> ExecuteQuery(Probe probe)
         {
+            int result = 0;
+
+            switch (probe.Type)
+            {
+                case "UserFilter":
+                    result = await ExecuteUserFilter(probe);
+                    break;
+                case "API":
+                    result = await ExecuteApiFilter(probe);
+                    break;
+            }
+
+            return result;
+        }
+
+        private async Task<int> ExecuteApiFilter(Probe probe)
+        {
             var url = _config.Url + _config.ProbeEndpoint
-                .Replace("{idApp}", probe.AppId)
-                .Replace("{idSchema}", probe.TableId);
+                .Replace("{appId}", probe.AppId)
+                .Replace("{tableId}", probe.TableId);
 
             var content = new StringContent(probe.FilterBody, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(url, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var resObject = JsonConvert.DeserializeObject<ResultCount>(result);
+
+                return resObject.Data.Count;
+            }
+
+            return default;
+        }
+
+        private async Task<int> ExecuteUserFilter(Probe probe)
+        {
+            var url = _config.Url + _config.FilterEndpoint
+                .Replace("{appId}", probe.AppId)
+                .Replace("{tableId}", probe.TableId)
+                .Replace("{filter}", probe.UserFilter);
+
+            var response = await _client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {

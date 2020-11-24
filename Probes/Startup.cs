@@ -29,6 +29,8 @@ namespace ProbesAPI
                     {
                         Url = Configuration.GetSection("Url").Value,
                         Endpoint = Configuration.GetSection("Endpoint").Value,
+                        FindProbeEndpoint = Configuration.GetSection("FindProbeEndpoint").Value,
+                        FilterEndpoint = Configuration.GetSection("FilterEndpoint").Value,
                         ProbeEndpoint = Configuration.GetSection("ProbeEndpoint").Value,
                         AppId = Configuration.GetSection("AppId").Value,
                         TableId = Configuration.GetSection("TableId").Value,
