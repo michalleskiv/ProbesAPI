@@ -95,11 +95,9 @@ namespace ProbesLib.Models
 
         private async Task<int> ExecuteQuery(Probe probe)
         {
-            var url = _config.Url + _config.Endpoint
+            var url = _config.Url + _config.ProbeEndpoint
                 .Replace("{idApp}", probe.AppId)
                 .Replace("{idSchema}", probe.TableId);
-
-            //var values
 
             var content = new StringContent(probe.FilterBody, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(url, content);
