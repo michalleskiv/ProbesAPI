@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using ProbesLib.Configurations;
 using ProbesLib.Data.Count;
 using ProbesLib.Data.DTO;
+using ProbesLib.Data.Exceptions;
 using ProbesLib.Data.Record;
 using ProbesLib.Interfaces;
 
@@ -105,10 +106,17 @@ namespace ProbesLib.Models
 
                 var probes = resObject.Data.Select(r => r.Fields).ToList();
 
-                return probes.Single(p => p.UniqueId == uniqueId);
+                try
+                {
+                    return probes.Single(p => p.UniqueId == uniqueId);
+                }
+                catch (Exception)
+                {
+                    throw new ProbeNotFoundException(uniqueId, url, response);
+                }
             }
 
-            return null;
+            throw new SomethingWentWrongException();
         }
 
         private async Task<int> ExecuteQuery(Probe probe)
