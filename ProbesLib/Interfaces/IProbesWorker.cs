@@ -18,20 +18,20 @@ namespace ProbesLib.Interfaces
         /// Gets definition of a probe
         /// </summary>
         /// <returns>Probe definition</returns>
-        Task<ProbesDTO> GetDefinition();
+        Task<DtoProbes> GetDefinition();
 
         /// <summary>
         /// Get a certain probe by id
         /// </summary>
         /// <param name="idProbe">Probe id</param>
         /// <returns>Probe</returns>
-        Task<ProbeDTO> GetById(int idProbe);
+        Task<DtoProbe> GetById(int idProbe);
 
         /// <summary>
         /// Gets count of records matching the probe
         /// </summary>
         /// <param name="idProbe">Probe id</param>
         /// <returns>FilteredCount object containing count of records and time of execution</returns>
-        Task<CountDTO> ExecuteProbe(int idProbe);
+        Task<DtoCount> ExecuteProbe(int idProbe);
     }
 }

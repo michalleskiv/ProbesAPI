@@ -2,7 +2,7 @@
 
 namespace ProbesLib.Data.DTO
 {
-    public class ProbeDTO
+    public class DtoProbe
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,7 +10,7 @@ namespace ProbesLib.Data.DTO
         public int DefaultMaxValue { get; set; }
         public string Note { get; set; }
 
-        public ProbeDTO(Probe probe)
+        public DtoProbe(Probe probe)
         {
             Id = probe.UniqueId;
             Name = probe.Name;

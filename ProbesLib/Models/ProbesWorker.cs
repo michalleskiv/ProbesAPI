@@ -45,27 +45,27 @@ namespace ProbesLib.Models
             return File.ReadAllText("bonjour.json");
         }
 
-        public async Task<ProbesDTO> GetDefinition()
+        public async Task<DtoProbes> GetDefinition()
         {
             var probes = await GetAllProbes();
 
-            return new ProbesDTO("1.0.0", probes);
+            return new DtoProbes("1.0.0", probes);
         }
 
-        public async Task<ProbeDTO> GetById(int idProbe)
+        public async Task<DtoProbe> GetById(int idProbe)
         {
-            return new ProbeDTO(await GetOneProbe(idProbe));
+            return new DtoProbe(await GetOneProbe(idProbe));
         }
 
-        public async Task<CountDTO> ExecuteProbe(int idProbe)
+        public async Task<DtoCount> ExecuteProbe(int idProbe)
         {
             var probes = await GetAllProbes();
             var probe = probes.SingleOrDefault(p => p.UniqueId == idProbe);
 
-            return new CountDTO
+            return new DtoCount
             {
-                respectiveValue = await ExecuteQuery(probe),
-                respectiveTime = DateTime.Now
+                RespectiveValue = await ExecuteQuery(probe),
+                RespectiveTime = DateTime.Now
             };
         }
 
