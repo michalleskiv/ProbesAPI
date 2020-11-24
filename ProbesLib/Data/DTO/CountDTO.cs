@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ProbesLib.Data.Count
+namespace ProbesLib.Data.DTO
 {
-    public class FilteredCount
+    public class CountDTO
     {
         public int respectiveValue { get; set; }
         public DateTime respectiveTime { get; set; }

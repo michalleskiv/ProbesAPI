@@ -2,6 +2,6 @@
 {
     public class DataCount
     {
-        public int count { get; set; }
+        public int Count { get; set; }
     }
 }

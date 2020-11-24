@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProbesLib.Configurations.Models;
 using ProbesLib.Interfaces;
 using ProbesLib.Models;
 
@@ -27,10 +28,10 @@ namespace ProbesAPI
                     config:new Config
                     {
                         Url = Configuration.GetSection("Url").Value,
-                        DefinitionsEndpoint = Configuration.GetSection("DefinitionsEndpoint").Value,
+                        Endpoint = Configuration.GetSection("Endpoint").Value,
                         ProbeEndpoint = Configuration.GetSection("ProbeEndpoint").Value,
-                        IdApp = Configuration.GetSection("IdApp").Value,
-                        IdSchema = Configuration.GetSection("IdSchema").Value,
+                        AppId = Configuration.GetSection("AppId").Value,
+                        TableId = Configuration.GetSection("TableId").Value,
                         Token = Configuration.GetSection("Token").Value,
                     }
                     ));

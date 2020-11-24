@@ -5,6 +5,6 @@
     /// </summary>
     public class ResultCount
     {
-        public DataCount data { get; set; }
+        public DataCount Data { get; set; }
     }
 }

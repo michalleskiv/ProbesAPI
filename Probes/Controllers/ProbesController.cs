@@ -19,7 +19,7 @@ namespace ProbesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Bonjour()
         {
-            return new OkObjectResult(_worker.Bonjour());
+            return Ok(_worker.Bonjour());
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ProbesAPI.Controllers
         [HttpGet("{idProbe}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetProbeById(string idProbe)
+        public async Task<IActionResult> GetProbeById(int idProbe)
         {
             return new OkObjectResult(await _worker.GetById(idProbe));
         }
@@ -62,7 +62,7 @@ namespace ProbesAPI.Controllers
         [HttpGet("{idProbe}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ExecuteProbeById(string idProbe)
+        public async Task<IActionResult> ExecuteProbeById(int idProbe)
         {
             return new OkObjectResult(await _worker.ExecuteProbe(idProbe));
         }

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using ProbesLib.Configurations;
 using ProbesLib.Data.Count;
-using ProbesLib.Data.Definitions;
+using ProbesLib.Data.DTO;
 using ProbesLib.Data.Record;
 using ProbesLib.Interfaces;
 
@@ -16,7 +20,7 @@ namespace ProbesLib.Models
     /// </summary>
     public class ProbesWorker : IProbesWorker
     {
-        private static HttpClient _client;
+        private HttpClient _client;
 
         private readonly IConfig _config;
 
@@ -41,67 +45,74 @@ namespace ProbesLib.Models
             return File.ReadAllText("bonjour.json");
         }
 
-        public async Task<ResultDefinition> GetDefinition()
+        public async Task<ProbesDTO> GetDefinition()
         {
-            var url = _config.Url + _config.DefinitionsEndpoint
-                .Replace("{idApp}", _config.IdApp)
-                .Replace("{idSchema}", _config.IdSchema);
+            var probes = await GetAllProbes();
 
-            var response = await _client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStreamAsync();
-                var resObject = await JsonSerializer.DeserializeAsync<ResultDefinition>(result);
-
-                return resObject;
-            }
-
-            return null;
+            return new ProbesDTO("1.0.0", probes);
         }
 
-        public async Task<ResultRecord> GetById(string idProbe)
+        public async Task<ProbeDTO> GetById(int idProbe)
         {
-            var url = _config.Url + _config.ProbeEndpoint
-                .Replace("{idApp}", _config.IdApp)
-                .Replace("{idSchema}", _config.IdSchema)
-                .Replace("{idProbe}", idProbe);
+            var probes = await GetAllProbes();
+            var probe = probes.SingleOrDefault(p => p.UniqueId == idProbe);
 
-            var response = await _client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStreamAsync();
-                var resObject = await JsonSerializer.DeserializeAsync<ResultRecord>(result);
-
-                return resObject;
-            }
-
-            return null;
+            return new ProbeDTO(probe);
         }
 
-        public async Task<FilteredCount> ExecuteProbe(string idProbe)
+        public async Task<CountDTO> ExecuteProbe(int idProbe)
         {
-            var resRecord = await GetById(idProbe);
+            var probes = await GetAllProbes();
+            var probe = probes.SingleOrDefault(p => p.UniqueId == idProbe);
 
-            var url = resRecord.data.fields.url;
+            return new CountDTO
+            {
+                respectiveValue = await ExecuteQuery(probe),
+                respectiveTime = DateTime.Now
+            };
+        }
+
+        private async Task<List<Probe>> GetAllProbes()
+        {
+            var url = _config.Url + _config.Endpoint
+                .Replace("{idApp}", _config.AppId)
+                .Replace("{idSchema}", _config.TableId);
 
             var response = await _client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStreamAsync();
+                var result = await response.Content.ReadAsStringAsync();
+                var resObject = JsonConvert.DeserializeObject<ResultRecord>(result);
 
-                var resObject = await JsonSerializer.DeserializeAsync<ResultCount>(result);
+                var probes = resObject.Data.Select(r => r.Fields).ToList();
 
-                return new FilteredCount
-                {
-                    respectiveValue = resObject.data.count,
-                    respectiveTime = DateTime.Now
-                };
+                return probes;
             }
 
-            return null;
+            return new List<Probe>();
+        }
+
+        private async Task<int> ExecuteQuery(Probe probe)
+        {
+            var url = _config.Url + _config.Endpoint
+                .Replace("{idApp}", probe.AppId)
+                .Replace("{idSchema}", probe.TableId);
+
+            //var values
+
+            var content = new StringContent(probe.FilterBody, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(url, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var resObject = JsonConvert.DeserializeObject<ResultCount>(result);
+
+                return resObject.Data.Count;
+            }
+
+            return default;
         }
     }
 }

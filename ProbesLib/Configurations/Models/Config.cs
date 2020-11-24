@@ -1,6 +1,6 @@
-﻿using ProbesLib.Interfaces;
+﻿using ProbesLib.Configurations;
 
-namespace ProbesLib.Models
+namespace ProbesLib.Configurations.Models
 {
     /// <summary>
     /// Implementation of IConfig
@@ -8,10 +8,10 @@ namespace ProbesLib.Models
     public class Config : IConfig
     {
         public string Url { get; set; }
-        public string DefinitionsEndpoint { get; set; }
+        public string Endpoint { get; set; }
         public string ProbeEndpoint { get; set; }
-        public string IdApp { get; set; }
-        public string IdSchema { get; set; }
+        public string AppId { get; set; }
+        public string TableId { get; set; }
         public string Token { get; set; }
     }
 }

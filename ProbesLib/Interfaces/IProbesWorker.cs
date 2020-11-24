@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ProbesLib.Data.Definitions;
-using ProbesLib.Data.Record;
-using ProbesLib.Data.Count;
+using ProbesLib.Data.DTO;
 
 namespace ProbesLib.Interfaces
 {
@@ -20,20 +18,20 @@ namespace ProbesLib.Interfaces
         /// Gets definition of a probe
         /// </summary>
         /// <returns>Probe definition</returns>
-        Task<ResultDefinition> GetDefinition();
+        Task<ProbesDTO> GetDefinition();
 
         /// <summary>
         /// Get a certain probe by id
         /// </summary>
         /// <param name="idProbe">Probe id</param>
         /// <returns>Probe</returns>
-        Task<ResultRecord> GetById(string idProbe);
+        Task<ProbeDTO> GetById(int idProbe);
 
         /// <summary>
         /// Gets count of records matching the probe
         /// </summary>
         /// <param name="idProbe">Probe id</param>
         /// <returns>FilteredCount object containing count of records and time of execution</returns>
-        Task<FilteredCount> ExecuteProbe(string idProbe);
+        Task<CountDTO> ExecuteProbe(int idProbe);
     }
 }
