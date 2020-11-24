@@ -4,16 +4,10 @@ using System.Text;
 
 namespace ProbesLib.Data.Exceptions
 {
-    public class SomethingWentWrongException : Exception
+    public abstract class SomethingWentWrongException : Exception
     {
-        public virtual string ErrorMessageDeveloper()
-        {
-            return string.Empty;
-        }
+        public abstract string ErrorMessageDeveloper();
 
-        public virtual string ErrorMessageUser()
-        {
-            return string.Empty;
-        }
+        public abstract string ErrorMessageUser();
     }
 }
