@@ -59,8 +59,7 @@ namespace ProbesLib.Models
 
         public async Task<DtoCount> ExecuteProbe(int idProbe)
         {
-            var probes = await GetAllProbes();
-            var probe = probes.SingleOrDefault(p => p.UniqueId == idProbe);
+            var probe = await GetOneProbe(idProbe);
 
             return new DtoCount
             {
