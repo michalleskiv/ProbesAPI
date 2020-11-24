@@ -43,7 +43,7 @@ namespace ProbesAPI.Middleware
             {
                 httpContext.Response.ContentType = "application/problem+json";
 
-                var title = includeDetails ? "An error occured: " + somethingWentWrong.Message : "An error occured";
+                var title = includeDetails ? "An error occurred: " + somethingWentWrong.Message : "An error occurred";
 
                 var details = somethingWentWrong.ErrorMessageUser();
 
@@ -60,6 +60,8 @@ namespace ProbesAPI.Middleware
                     problem.Extensions["traceId"] = traceId;
                 }
 
+                httpContext.Response.StatusCode = 400;
+
                 var stream = httpContext.Response.Body;
                 await JsonSerializer.SerializeAsync(stream, problem);
             }
@@ -70,7 +72,7 @@ namespace ProbesAPI.Middleware
                 httpContext.Response.ContentType = "application/problem+json";
 
                 // Get the details to display, depending on whether we want to expose the raw exception
-                var title = includeDetails ? "An error occured: " + ex.Message : "An error occured";
+                var title = includeDetails ? "An error occurred: " + ex.Message : "An error occurred";
                 var details = includeDetails ? ex.ToString() : null;
 
                 var problem = new ProblemDetails

@@ -116,7 +116,7 @@ namespace ProbesLib.Models
                 }
             }
 
-            throw new SomethingWentWrongException();
+            return null;
         }
 
         private async Task<int> ExecuteQuery(Probe probe)
