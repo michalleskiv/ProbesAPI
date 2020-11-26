@@ -1,4 +1,6 @@
-﻿namespace ProbesLib.Data.Record
+﻿using ProbesLib.Data.Record.ApiKey;
+
+namespace ProbesLib.Data.Record
 {
     public class Probe
     {
@@ -13,5 +15,7 @@
         public int MaxValue { get; set; }
         public string Description { get; set; }
         public Documentation Documentation { get; set; }
+        public string Url { get; set; }
+        public ApiKeyRecord ApiKey { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace ProbesAPI
                         ProbeEndpoint = Configuration.GetSection("ProbeEndpoint").Value,
                         AppId = Configuration.GetSection("AppId").Value,
                         TableId = Configuration.GetSection("TableId").Value,
-                        Token = Configuration.GetSection("Token").Value,
+                        Token = Configuration.GetSection("Token").Value
                     }
                     ));
         }

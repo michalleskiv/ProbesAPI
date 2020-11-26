@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ProbesLib.Configurations;
 using ProbesLib.Data.Count;
 using ProbesLib.Data.DTO;
@@ -34,7 +35,7 @@ namespace ProbesLib.Models
 
         public void ConfigureClient()
         {
-            _client = new HttpClient {BaseAddress = new Uri(_config.Url)};
+            _client = new HttpClient();
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -131,6 +132,9 @@ namespace ProbesLib.Models
                 case "API":
                     result = await ExecuteApiFilter(probe);
                     break;
+                case "Magento":
+                    result = await ExecuteMagento(probe);
+                    break;
             }
 
             return result;
@@ -171,6 +175,28 @@ namespace ProbesLib.Models
                 var resObject = JsonConvert.DeserializeObject<ResultCount>(result);
 
                 return resObject.Data.Count;
+            }
+
+            return default;
+        }
+
+        private async Task<int> ExecuteMagento(Probe probe)
+        {
+            var url = probe.Url;
+
+            using var client = new HttpClient();
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", probe.ApiKey.Fields.Value);
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                var rss = JObject.Parse(result);
+
+                return (int) rss["total_count"];
             }
 
             return default;
