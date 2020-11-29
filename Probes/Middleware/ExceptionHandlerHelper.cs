@@ -47,7 +47,7 @@ namespace ProbesAPI.Middleware
 
                 var problem = new ProblemDetails
                 {
-                    Status = 400,
+                    Status = (int) somethingWentWrong.HttpCode,
                     Title = title,
                     Detail = details
                 };

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ProbesLib.Configurations;
@@ -70,6 +72,10 @@ namespace ProbesLib.Models
             };
         }
 
+        /// <summary>
+        /// Gets all probes from database
+        /// </summary>
+        /// <returns>All probes</returns>
         private async Task<List<Probe>> GetAllProbes()
         {
             var url = _config.Url + _config.Endpoint
@@ -91,6 +97,11 @@ namespace ProbesLib.Models
             return new List<Probe>();
         }
 
+        /// <summary>
+        /// Gets probes by "uniqueId" field
+        /// </summary>
+        /// <param name="uniqueId">Probe uniqueId</param>
+        /// <returns>A certain probe</returns>
         private async Task<Probe> GetOneProbe(int uniqueId)
         {
             var url = _config.Url + _config.FindProbeEndpoint
@@ -117,9 +128,19 @@ namespace ProbesLib.Models
                 }
             }
 
-            return null;
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new DrMaxServerErrorException(HttpStatusCode.Conflict);
+            }
+
+            throw new UnknownException(HttpStatusCode.InternalServerError);
         }
 
+        /// <summary>
+        /// Executes probe
+        /// </summary>
+        /// <param name="probe">Probe to execute</param>
+        /// <returns>Count of found items</returns>
         private async Task<int> ExecuteQuery(Probe probe)
         {
             int result = 0;
@@ -140,6 +161,11 @@ namespace ProbesLib.Models
             return result;
         }
 
+        /// <summary>
+        /// Executes probe with API type
+        /// </summary>
+        /// <param name="probe">Probe with API type</param>
+        /// <returns>Count of found items</returns>
         private async Task<int> ExecuteApiFilter(Probe probe)
         {
             var url = _config.Url + _config.ProbeEndpoint
@@ -160,6 +186,11 @@ namespace ProbesLib.Models
             return default;
         }
 
+        /// <summary>
+        /// Executes probe with User Filter type
+        /// </summary>
+        /// <param name="probe">Probe with User Filter type</param>
+        /// <returns>Count of found items</returns>
         private async Task<int> ExecuteUserFilter(Probe probe)
         {
             var url = _config.Url + _config.FilterEndpoint
@@ -180,14 +211,20 @@ namespace ProbesLib.Models
             return default;
         }
 
+        /// <summary>
+        /// Executes probe with Magento type
+        /// </summary>
+        /// <param name="probe">Probe with Magento type</param>
+        /// <returns>Count of found items</returns>
         private async Task<int> ExecuteMagento(Probe probe)
         {
-            var url = probe.Url;
-
             using var client = new HttpClient();
+
+            var url = SetCurrentPageAndSize(probe.Url);
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", probe.ApiKey.Fields.Value);
+            
             var response = await client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
@@ -200,6 +237,30 @@ namespace ProbesLib.Models
             }
 
             return default;
+        }
+
+        /// <summary>
+        /// Adds pageSize and currentPage parameters if they were missed
+        /// </summary>
+        /// <param name="url">Current URL</param>
+        /// <returns>URL with required parameters</returns>
+        private string SetCurrentPageAndSize(string url)
+        {
+            var queryString = HttpUtility.ParseQueryString(url);
+
+            var pageSize = queryString["searchCriteria[pageSize]"];
+            if (pageSize == null)
+            {
+                queryString.Add("searchCriteria[pageSize]", "1");
+            }
+
+            var currentPage = queryString["searchCriteria[currentPage]"];
+            if (currentPage == null)
+            {
+                queryString.Add("searchCriteria[currentPage]", "1");
+            }
+
+            return queryString.ToString();
         }
     }
 }

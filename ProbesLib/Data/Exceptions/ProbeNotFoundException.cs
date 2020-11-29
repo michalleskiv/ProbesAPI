@@ -9,7 +9,7 @@ namespace ProbesLib.Data.Exceptions
         public string Url { get; set; }
         public HttpResponseMessage Response { get; set; }
 
-        public ProbeNotFoundException(int idProbe, string url, HttpResponseMessage response)
+        public ProbeNotFoundException(int idProbe, string url, HttpResponseMessage response) : base(response.StatusCode)
         {
             IdProbe = idProbe;
             Url = url;
