@@ -14,7 +14,7 @@ namespace ProbesLib.Data.Record
         public int LowValue { get; set; }
         public int MaxValue { get; set; }
         public string Description { get; set; }
-        public Documentation Documentation { get; set; }
+        public Url Documentation { get; set; }
         public string Url { get; set; }
         public ApiKeyRecord ApiKey { get; set; }
     }

@@ -56,20 +56,37 @@ namespace ProbesLib.Models
             return new DtoProbes("1.0.0", probes);
         }
 
-        public async Task<DtoProbe> GetById(int idProbe)
+        public async Task<DtoProbe> GetProbeDto(string idProbe)
         {
-            return new DtoProbe(await GetOneProbe(idProbe));
+            return new DtoProbe(await GetProbe(idProbe));
         }
 
-        public async Task<DtoCount> ExecuteProbe(int idProbe)
+        public async Task<DtoCount> ExecuteProbe(string idProbe)
         {
-            var probe = await GetOneProbe(idProbe);
+            var probe = await GetProbe(idProbe);
 
             return new DtoCount
             {
                 RespectiveValue = await ExecuteQuery(probe),
                 RespectiveTime = DateTime.Now
             };
+        }
+
+        private async Task<Probe> GetProbe(string idProbe)
+        {
+            if (int.TryParse(idProbe, out int result))
+            {
+                try
+                {
+                    return await GetProbeById(result);
+                }
+                catch (ProbeNotFoundException)
+                {
+                    return await GetProbeByName(idProbe);
+                }
+            }
+
+            return await GetProbeByName(idProbe);
         }
 
         /// <summary>
@@ -102,9 +119,9 @@ namespace ProbesLib.Models
         /// </summary>
         /// <param name="uniqueId">Probe uniqueId</param>
         /// <returns>A certain probe</returns>
-        private async Task<Probe> GetOneProbe(int uniqueId)
+        private async Task<Probe> GetProbeById(int uniqueId)
         {
-            var url = _config.Url + _config.FindProbeEndpoint
+            var url = _config.Url + _config.FindProbeByIdEndpoint
                 .Replace("{appId}", _config.AppId)
                 .Replace("{tableId}", _config.TableId)
                 .Replace("{uniqueId}", uniqueId.ToString());
@@ -125,6 +142,45 @@ namespace ProbesLib.Models
                 catch (Exception)
                 {
                     throw new ProbeNotFoundException(uniqueId, url, response);
+                }
+            }
+
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new DrMaxServerErrorException(HttpStatusCode.Conflict);
+            }
+
+            throw new UnknownException(HttpStatusCode.InternalServerError);
+        }
+
+        /// <summary>
+        /// Gets probes by "name" field
+        /// </summary>
+        /// <param name="name">Probe name</param>
+        /// <returns>A certain probe</returns>
+        private async Task<Probe> GetProbeByName(string name)
+        {
+            var url = _config.Url + _config.FindProbeByNameEndpoint
+                .Replace("{appId}", _config.AppId)
+                .Replace("{tableId}", _config.TableId)
+                .Replace("{name}", name);
+
+            var response = await _client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var resObject = JsonConvert.DeserializeObject<ResultRecord>(result);
+
+                var probes = resObject.Data.Select(r => r.Fields).ToList();
+
+                try
+                {
+                    return probes.Single(p => p.Name == name);
+                }
+                catch (Exception)
+                {
+                    throw new ProbeNotFoundException(name, url, response);
                 }
             }
 

@@ -6,12 +6,20 @@ namespace ProbesLib.Data.Exceptions
     public class ProbeNotFoundException : SomethingWentWrongException
     {
         public int IdProbe { get; set; }
+        public string NameProbe { get; set; }
         public string Url { get; set; }
         public HttpResponseMessage Response { get; set; }
 
         public ProbeNotFoundException(int idProbe, string url, HttpResponseMessage response) : base(response.StatusCode)
         {
             IdProbe = idProbe;
+            Url = url;
+            Response = response;
+        }
+
+        public ProbeNotFoundException(string nameProbe, string url, HttpResponseMessage response) : base(response.StatusCode)
+        {
+            NameProbe = nameProbe;
             Url = url;
             Response = response;
         }

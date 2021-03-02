@@ -36,19 +36,19 @@ namespace ProbesAPI.Controllers
         }
 
         /// <summary>
-        /// Returns probe by id
+        /// Returns probe by name
         /// </summary>
-        /// <param name="idProbe">Id of a probe</param>
+        /// <param name="idProbe">Name of a probe</param>
         /// <returns>A probe</returns>
         /// <response code="200">Returns a probe</response>
         /// <response code="400">Probe with such id doesn't exist</response>
-        [Route("/probes/{idProbe:int}")]
-        [HttpGet("{idProbe:int}")]
+        [Route("/probes/{idProbe}")]
+        [HttpGet("{idProbe}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetProbeById(int idProbe)
+        public async Task<IActionResult> GetProbeByName(string idProbe)
         {
-            return new OkObjectResult(await _worker.GetById(idProbe));
+            return new OkObjectResult(await _worker.GetProbeDto(idProbe));
         }
 
         /// <summary>
@@ -58,11 +58,11 @@ namespace ProbesAPI.Controllers
         /// <returns>Count of records matching the probe and time of execution</returns>
         /// <response code="200">Returns result</response>
         /// <response code="400">Probe with such id doesn't exist</response>
-        [Route("/probes/{idProbe:int}/data")]
-        [HttpGet("{idProbe:int}")]
+        [Route("/probes/{idProbe}/data")]
+        [HttpGet("{idProbe}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ExecuteProbeById(int idProbe)
+        public async Task<IActionResult> ExecuteProbeById(string idProbe)
         {
             return new OkObjectResult(await _worker.ExecuteProbe(idProbe));
         }
